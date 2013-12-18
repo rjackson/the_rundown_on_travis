@@ -280,6 +280,11 @@ All emails will be sent to the addresses listed.
 
 ---
 
+<img width="100%" src="images/email_default_notification.png"/>
+
+
+---
+
 # Disable email notifications:
 
 ```
@@ -316,6 +321,120 @@ https://travis-ci.org/rjackson/work_days/builds/15670128
 
 on_success defaults to change
 on_failure defaults to always
+
+---
+
+# IRC Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+irc:
+  - "chat.freenode.net#rwjblue"
+```
+
+Sample:
+
+<img width="100%" src="images/irc_default_notification.png"/>
+
+https://travis-ci.org/rjackson/work_days/builds/15670739
+
+---
+
+# Conditional IRC Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+irc:
+  channels:
+    - "chat.freenode.net#rwjblue"
+  on_success: always
+  on_failure: always
+```
+
+https://travis-ci.org/rjackson/work_days/builds/15671080
+
+???
+
+on_success defaults to always
+on_failure defaults to always
+
+---
+
+# Custom IRC Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+irc:
+  channels:
+    - "chat.freenode.net#rwjblue"
+  template:
+    - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+    - "Change view : %{compare_url}"
+    - "Build details : %{build_url}"
+```
+
+???
+
+You can interpolate the following variables:
+
+repository: your GitHub repo URL
+build_number: build number
+branch: branch build name
+commit: shortened commit SHA
+author: commit author name
+message: travis message to the build
+compare_url: commit change view URL
+build_url: URL of the build detail
+
+---
+
+# Webhooks
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+  webhooks: http://your-domain.com/notifications
+```
+
+???
+
+The URL provided will be posted to with a JSON payload including 
+all of the build details (including pass/fail).
+
+https://gist.github.com/svenfuchs/1225015
+
+---
+
+# Webhook Authorization Header
+
+```ruby
+require 'digest'
+
+sha = Digest::SHA2.new
+sha << 'rjackson/work_days' + TRAVIS_TOKEN
+sha.hexdigest
+```
+
+```python
+from hashlib import sha256
+
+sha256('rjackson/work_days' + TRAVIS_TOKEN).hexdigest()
+```
 
     </textarea>
     <script src="./bower_components/remarkjs/remark.js" type="text/javascript">
