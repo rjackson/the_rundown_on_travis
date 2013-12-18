@@ -1,0 +1,14 @@
+{
+  "name": "remarkjs",
+  "homepage": "https://github.com/gnab/remark",
+  "version": "0.5.9",
+  "_release": "0.5.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.5.9",
+    "commit": "98cef0febe4748401a2f8145cc06f9bae084dfc4"
+  },
+  "_source": "git://github.com/gnab/remark.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/gnab/remark"
+}
