@@ -41,6 +41,10 @@
 <img style="float: right" src="images/The_Rundown_Movie.jpg"/>
 
 Robert Jackson
+<p>
+  <div>github: rjackson</div>
+  <div>twitter: rwjblue</div>
+</p>
 
 2013-12-19
 
@@ -332,8 +336,8 @@ rvm:
   - 2.0.0
 script: rspec
 notifications:
-irc:
-  - "chat.freenode.net#rwjblue"
+  irc:
+    - "chat.freenode.net#rwjblue"
 ```
 
 Sample:
@@ -424,10 +428,8 @@ https://gist.github.com/svenfuchs/1225015
 
 ```ruby
 require 'digest'
-
-sha = Digest::SHA2.new
-sha << 'rjackson/work_days' + TRAVIS_TOKEN
-sha.hexdigest
+Digest::SHA2.hexdigest('rjackson/work_days' + 
+                        TRAVIS_TOKEN)
 ```
 
 ```python
@@ -527,6 +529,315 @@ https://gist.github.com/svenfuchs/1225015
 ```
 
 https://gist.github.com/svenfuchs/1225015
+
+---
+
+# Campfire Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+  campfire: [subdomain]:[api token]@[room id]
+```
+
+
+---
+
+# Flowdock Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+  flowdock: [api token]
+```
+
+
+---
+
+# HipChat Notifications
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+notifications:
+  hipchat: [api token]@[room name]
+```
+
+
+
+---
+
+# Securing Secrets
+
+* Each repo is given a key pair:
+
+  https://api.travis-ci.org/repos/rjackson/work_days/key
+
+* Use the public key to encrypt the secret data in your `.travis.yml`.
+
+* Use `secret: <ENCRYPTED_STRING>`
+
+---
+
+# Let me do that for you:
+
+```sh
+$ gem install travis
+$ travis encrypt SOMEVAR=secretvalue
+```
+
+Then copy and paste into your `.travis.yml`.
+
+To avoid copying & pasting:
+
+```sh
+$ travis encrypt api_token_value --add \
+    notifcations.flowdock
+```
+
+
+---
+
+# SHIP IT!
+
+## Deployment Options
+
+* Heroku
+* S3
+* NPM
+* RubyGems
+* Many others...
+
+---
+
+# Heroku Deployment
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: heroku
+  api_key: "YOUR API KEY"
+```
+
+Populate the secure API key:
+
+```
+travis encrypt $(heroku auth:token) --add deploy.api_key
+```
+
+---
+
+# Heroku Deployment w/Custom App Name
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: heroku
+  api_key: "YOUR API KEY"
+  app: something-other-than-your-repo-name
+```
+
+---
+
+# Heroku Deployment per Branch
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: heroku
+  api_key: "YOUR API KEY"
+  app:
+    master: dont-touch-the-red-button
+    staging: not-so-sure-about-this
+    production: ship-it-city
+```
+
+
+---
+
+# Heroku Deployment w/After Deploy
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: heroku
+  api_key: "YOUR API KEY"
+  run:
+    - "rake db:migrate"
+    - "rake cleanup"
+```
+
+---
+
+# S3 Deployment
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+  script: rspec
+  deploy:
+    provider: s3
+    access_key_id: "YOUR AWS ACCESS KEY"
+    secret_access_key: "YOUR AWS SECRET KEY"
+    bucket: "S3 Bucket"
+    skip_cleanup: true
+```
+
+```sh
+$ travis encrypt ... --add deploy.secret_access_key
+$ travis encrypt ... --add deploy.access_key_id
+```
+
+???
+
+OR
+
+```
+ $ travis setup s3
+```
+
+---
+
+# S3 Deployment on Tags
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+  script: rspec
+  deploy:
+    provider: s3
+    access_key_id: "YOUR AWS ACCESS KEY"
+    secret_access_key: "YOUR AWS SECRET KEY"
+    bucket: "S3 Bucket"
+    skip_cleanup: true
+  'on':
+    tags: true
+```
+
+'on' - WTF?
+
+https://gist.github.com/rjackson/6700004
+
+---
+
+# S3 Deployment Custom Folders
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+  script: rspec
+  deploy:
+    provider: s3
+    access_key_id: "YOUR AWS ACCESS KEY"
+    secret_access_key: "YOUR AWS SECRET KEY"
+    bucket: "S3 Bucket"
+    skip_cleanup: true
+    local-dir: some-non-root-dir
+    upload-dir: something-other-than-default
+```
+
+Will only upload the `/build` directory contents to S3.
+
+---
+
+# NPM Deployment
+
+```
+language: js
+ooe4
+deploy:
+  provider: npm
+  email: "YOUR EMAIL ADDRESS"
+  api_key: "YOUR API KEY"
+  on:
+    tags: true
+```
+
+```sh
+travis encrypt ... --add deploy.api_key
+```
+
+---
+
+# RubyGems Deployment
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: rubygems
+  api_key: "YOUR API KEY"
+  on:
+    tags: true
+```
+
+```sh
+travis encrypt --add deploy.api_key
+```
+
+---
+
+# RubyGems Deployment w/Custom Name
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: rubygems
+  api_key: "YOUR API KEY"
+  gem: my-gem-name
+  on:
+    tags: true
+```
+
+---
+
+# RubyGems Deployment -- Prereleases
+
+```
+language: ruby
+rvm:
+  - 2.0.0
+script: rspec
+deploy:
+  provider: rubygems
+  api_key: "YOUR API KEY"
+```
+
+```ruby
+# in your gemspec (with less wrapping)
+if ENV['TRAVIS']
+  s.version = "#{s.version}-alpha-" + 
+            ENV['TRAVIS_BUILD_NUMBER']
+end
+```
 
     </textarea>
     <script src="./bower_components/remarkjs/remark.js" type="text/javascript">

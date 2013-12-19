@@ -3,10 +3,8 @@
 
 ```ruby
 require 'digest'
-
-sha = Digest::SHA2.new
-sha << 'rjackson/work_days' + TRAVIS_TOKEN
-sha.hexdigest
+Digest::SHA2.hexdigest('rjackson/work_days' + 
+                        TRAVIS_TOKEN)
 ```
 
 ```python

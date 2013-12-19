@@ -7,8 +7,8 @@ rvm:
   - 2.0.0
 script: rspec
 notifications:
-irc:
-  - "chat.freenode.net#rwjblue"
+  irc:
+    - "chat.freenode.net#rwjblue"
 ```
 
 Sample:

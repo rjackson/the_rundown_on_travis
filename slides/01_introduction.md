@@ -4,6 +4,10 @@
 <img style="float: right" src="images/The_Rundown_Movie.jpg"/>
 
 Robert Jackson
+<p>
+  <div>github: rjackson</div>
+  <div>twitter: rwjblue</div>
+</p>
 
 2013-12-19
 
