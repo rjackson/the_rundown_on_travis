@@ -38,7 +38,7 @@
       
 # The Rundown (on Travis)
 
-<img style="float: right" src="images/The_Rundown_Movie.jpg"/>
+<img style="float: right" src="images/travis.gif"/>
 
 Robert Jackson
 <p>
@@ -614,6 +614,7 @@ $ travis encrypt api_token_value --add \
 * S3
 * NPM
 * RubyGems
+* Custom
 * Many others...
 
 ---
@@ -838,6 +839,78 @@ if ENV['TRAVIS']
             ENV['TRAVIS_BUILD_NUMBER']
 end
 ```
+
+---
+
+# Custom Deployment Script
+
+```
+language: js
+node_js:
+  - 0.10
+script: grunt test
+after_success:
+  - grunt deploy
+```
+
+https://travis-ci.org/rjackson/ember-live-api/builds/15688141
+
+---
+
+# I feel the need, the need for speed!
+
+## Tricks/Tips to speed up your builds...
+
+* Cache packages. #1 speedup is not compiling C extensions.
+  * Eliminates RubyGems SSL / Timeout issues.
+  * Installing `nokogiri` alone takes 88 seconds!
+
+* Remove non-essential gems from `Gemfile`/`gemspec`.
+
+* Use matrix builds to speed up tests.
+
+---
+
+# Caching Options
+
+* Baked in with Private Travis:
+
+```
+language: ruby
+cache: bundler  # enables built-in caching
+```
+
+* https://github.com/Fingertips/WAD
+
+* BASH Scripts
+
+---
+
+# Caching with WAD
+
+* Get the script:
+
+```bash
+$ curl -o bin/wad \
+  https://raw.github.com/Fingertips/WAD/master/bin/wad
+$ chmod +x bin/wad
+```
+
+Then use `bin/wad` instead of `bundle install`:
+
+```
+language: ruby
+install: bin/wad
+script: rspec
+```
+
+---
+
+# Cache with Curl, BASH, and OpenSSL
+
+* s3-put - https://github.com/emberjs/ember-dev/blob/master/bin/s3-put
+
+* cached-bundle - https://github.com/emberjs/ember-dev/blob/master/bin/cached-bundle
 
     </textarea>
     <script src="./bower_components/remarkjs/remark.js" type="text/javascript">

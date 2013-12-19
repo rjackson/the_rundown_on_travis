@@ -1,7 +1,7 @@
 
 # The Rundown (on Travis)
 
-<img style="float: right" src="images/The_Rundown_Movie.jpg"/>
+<img style="float: right" src="images/travis.gif"/>
 
 Robert Jackson
 <p>

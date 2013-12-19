@@ -7,4 +7,5 @@
 * S3
 * NPM
 * RubyGems
+* Custom
 * Many others...
